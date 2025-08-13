@@ -12,8 +12,8 @@
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd ml_pipeline
+   git clone https://github.com/stevensoma21/structured-pdf-parser
+   cd structured-pdf-parser
    ```
 
 2. **Create virtual environment**
@@ -36,12 +36,12 @@
 
 1. **Build the container**
    ```bash
-   docker build -t ml-pipeline .
+   docker build -t structured-pdf-parser .
    ```
 
 2. **Run the container**
    ```bash
-   docker run -p 8000:8000 -v $(pwd)/data:/app/data ml-pipeline
+   docker run -p 8000:8000 -v $(pwd)/data:/app/data structured-pdf-parser
    ```
 
 ## Basic Usage
