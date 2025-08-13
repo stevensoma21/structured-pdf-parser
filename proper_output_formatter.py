@@ -149,28 +149,28 @@ def main():
             json.dump(output, f, indent=2)
         
         # Print summary
-        print(f"✅ Processing completed successfully!")
-        print(f"   📄 Document ID: {output['doc_id']}")
-        print(f"   📋 Title: {output['title']}")
-        print(f"   📊 Modules: {len(output['modules'])}")
+        print(f"Processing completed successfully!")
+        print(f"   Document ID: {output['doc_id']}")
+        print(f"   Title: {output['title']}")
+        print(f"   Modules: {len(output['modules'])}")
         
         total_steps = sum(len(module.get('steps', [])) for module in output['modules'])
-        print(f"   📋 Total Steps: {total_steps}")
-        print(f"   🔄 Flows: {len(output['flows'])}")
+        print(f"   Total Steps: {total_steps}")
+        print(f"   Flows: {len(output['flows'])}")
         
-        print(f"\n📋 Module Details:")
+        print(f"\nModule Details:")
         for i, module in enumerate(output['modules'], 1):
             print(f"   {i}. {module['heading']}")
             print(f"      Steps: {len(module.get('steps', []))}")
             if 'taxonomies' in module:
                 print(f"      Taxonomies: {len(module['taxonomies'].get('maintenance_types', []))}")
         
-        print(f"\n📋 Sample Steps:")
+        print(f"\nSample Steps:")
         for module in output['modules']:
             for step in module.get('steps', [])[:2]:
                 print(f"   • {step['step_id']}: {step['text'][:50]}...")
         
-        print(f"\n💾 Results saved to: proper_output_results.json")
+        print(f"\nResults saved to: proper_output_results.json")
         
         return True
         

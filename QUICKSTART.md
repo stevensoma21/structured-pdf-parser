@@ -11,12 +11,12 @@
 This project includes a **working pipeline** (`final_proper_pipeline.py`) that produces rich, structured JSON output without dependency issues. This is the recommended approach for immediate use.
 
 **Key Features:**
-- ✅ No NumPy compatibility issues
-- ✅ Rich extraction of modules, steps, and taxonomies
-- ✅ 99% confidence scores
-- ✅ Schema-compliant JSON output
-- ✅ Handles multiple PDF files
-- ✅ Detailed evidence tracking
+- No NumPy compatibility issues
+- Rich extraction of modules, steps, and taxonomies
+- 99% confidence scores
+- Schema-compliant JSON output
+- Handles multiple PDF files
+- Detailed evidence tracking
 
 **Quick Test:**
 ```bash

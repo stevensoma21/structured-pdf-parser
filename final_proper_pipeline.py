@@ -30,7 +30,7 @@ def process_pdf_with_proper_format(pdf_path, output_dir):
         
         # Print summary
         print(f"Processing completed successfully!")
-        print(f"   📄 Document ID: {output['doc_id']}")
+        print(f"   Document ID: {output['doc_id']}")
         print(f"   Title: {output['title']}")
         print(f"   Modules: {len(output['modules'])}")
         
@@ -150,7 +150,7 @@ def main():
     
     # Print final summary
     print(f"\nFINAL PROCESSING SUMMARY:")
-    print(f"   📄 Total files processed: {summary['processing_summary']['total_files_processed']}")
+    print(f"   Total files processed: {summary['processing_summary']['total_files_processed']}")
     print(f"   Successful extractions: {summary['processing_summary']['successful_extractions']}")
     print(f"   Failed extractions: {summary['processing_summary']['failed_extractions']}")
     print(f"   Total modules identified: {summary['overall_statistics']['total_modules']}")
@@ -164,7 +164,7 @@ def main():
         print(f"     Title: {result['title']}")
         print(f"     Modules: {result['modules']}, Steps: {result['total_steps']}, Flows: {result['flows']}")
     
-    print(f"\n💾 Final summary saved to: {summary_file}")
+    print(f"\nFinal summary saved to: {summary_file}")
     
     print(f"\nFINAL PIPELINE EXECUTION COMPLETED!")
     print(f"   All results saved in: {output_dir}")
