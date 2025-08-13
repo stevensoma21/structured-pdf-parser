@@ -1,0 +1,121 @@
+# Technical Document ML Pipeline Configuration
+
+# Logging configuration
+log_level: INFO
+
+# Confidence thresholds for different processing stages
+confidence_thresholds:
+  low: 0.3
+  medium: 0.6
+  high: 0.8
+
+# PDF Processing configuration
+pdf_processor:
+  ocr_enabled: true
+  min_confidence: 0.7
+  extraction_methods:
+    - pymupdf
+    - pdfplumber
+    - ocr
+  max_pages: 100
+  image_dpi: 300
+
+# NLP Processing configuration
+nlp_processor:
+  spacy_model: en_core_web_sm
+  sentence_transformer_model: all-MiniLM-L6-v2
+  enable_dependency_parsing: true
+  enable_semantic_search: true
+  max_text_length: 10000
+  technical_keywords:
+    safety:
+      - safety
+      - secure
+      - danger
+      - hazard
+      - warning
+      - caution
+    maintenance:
+      - maintenance
+      - repair
+      - service
+      - inspect
+      - check
+    procedure:
+      - procedure
+      - step
+      - process
+      - method
+      - protocol
+
+# LLM Processing configuration
+llm_processor:
+  model_name: gpt2
+  max_length: 512
+  temperature: 0.7
+  use_ctransformers: true
+  enable_llm: true
+  fallback_enabled: true
+  model_cache_dir: ./models
+
+# Agentic Workflow configuration
+agentic_workflow:
+  enable_quality_assessment: true
+  enable_fallback_strategies: true
+  max_processing_time: 300  # 5 minutes
+  decision_rules:
+    text_quality_assessment:
+      high_quality:
+        min_length: 1000
+        max_noise_ratio: 0.1
+        min_confidence: 0.8
+      medium_quality:
+        min_length: 500
+        max_noise_ratio: 0.2
+        min_confidence: 0.6
+      low_quality:
+        min_length: 100
+        max_noise_ratio: 0.5
+        min_confidence: 0.3
+
+# Data Structuring configuration
+data_structurer:
+  output_format: json
+  include_metadata: true
+  include_raw_data: false
+  max_summary_length: 500
+  enable_validation: true
+
+# Security configuration
+security:
+  encrypt_output: false
+  access_control: false
+  audit_logging: true
+  data_retention_days: 30
+  allowed_file_types:
+    - pdf
+
+# Performance configuration
+performance:
+  max_memory_usage: 4GB
+  batch_size: 1
+  parallel_processing: false
+  cache_enabled: true
+  cache_ttl: 3600  # 1 hour
+
+# API configuration
+api:
+  host: 0.0.0.0
+  port: 8000
+  max_upload_size: 50MB
+  rate_limit: 100  # requests per minute
+  cors_enabled: true
+  cors_origins:
+    - "*"
+
+# Monitoring configuration
+monitoring:
+  enable_metrics: true
+  enable_health_checks: true
+  log_processing_times: true
+  alert_on_errors: true
