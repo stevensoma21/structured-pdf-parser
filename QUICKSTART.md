@@ -17,6 +17,7 @@ This project includes a **working pipeline** (`final_proper_pipeline.py`) that p
 - Schema-compliant JSON output
 - Handles multiple PDF files
 - Detailed evidence tracking
+- No external model downloads required
 
 **Quick Test:**
 ```bash
@@ -44,10 +45,7 @@ python final_proper_pipeline.py
    pip install -r requirements.txt
    ```
 
-4. **Download required models**
-   ```bash
-   python src/download_models.py
-   ```
+4. **Ready to use!** No model downloads required.
 
 ### Option 2: Docker Installation
 
@@ -85,23 +83,6 @@ python final_proper_pipeline.py
    "
    ```
 
-**Alternative: Use the main pipeline (may have dependency issues)**
-
-4. **Process a single PDF document**
-   ```bash
-   python -m src.main --input aircraft_maintenance_chapter.pdf --output result.json
-   ```
-
-5. **Process multiple documents**
-   ```bash
-   python -m src.main --input-dir ./data --output-dir ./results
-   ```
-
-6. **Start API server**
-   ```bash
-   python -m src.main --api --host 0.0.0.0 --port 8000
-   ```
-
 ### Python API
 
 **Recommended: Use the working pipeline**
@@ -119,50 +100,12 @@ print(f"Modules: {len(output['modules'])}")
 print(f"Total Steps: {sum(len(module.get('steps', [])) for module in output['modules'])}")
 ```
 
-**Alternative: Use the main pipeline (may have dependency issues)**
-
-```python
-from src.pipeline import TechnicalDocPipeline
-
-# Initialize pipeline
-pipeline = TechnicalDocPipeline()
-
-# Process a document
-results = pipeline.process_document("path/to/document.pdf")
-
-# Access results
-print(f"Confidence: {results['document_info']['confidence_score']}")
-print(f"Modules: {len(results['modules'])}")
-print(f"Steps: {len(results['procedural_steps'])}")
-```
-
-### REST API
-
-1. **Start the server**
-   ```bash
-   python -m src.main --api
-   ```
-
-2. **Process document via API**
-   ```bash
-   curl -X POST "http://localhost:8000/process" \
-        -H "Content-Type: application/json" \
-        -d '{"input_path": "document.pdf", "output_path": "result.json"}'
-   ```
-
-3. **Upload and process document**
-   ```bash
-   curl -X POST "http://localhost:8000/process/upload" \
-        -F "file=@document.pdf"
-   ```
-
 ## Configuration
 
 ### Environment Variables
 
 ```bash
 export LOG_LEVEL=INFO
-export LLM_MODEL_NAME=gpt2
 export ENABLE_LLM=true
 export MAX_MEMORY_USAGE=4GB
 ```
@@ -183,39 +126,37 @@ pdf_processor:
 
 ## Example Output
 
-The pipeline produces structured JSON output:
+The working pipeline produces structured JSON output:
 
 ```json
 {
-  "document_info": {
-    "filename": "aircraft_maintenance_chapter.pdf",
-    "processing_timestamp": "2024-01-15T10:30:00Z",
-    "confidence_score": 0.87
-  },
+  "doc_id": "aircraft_maintenance_chapter",
+  "title": "Chapter 1: Introduction to Aircraft Maintenance",
   "modules": [
     {
-      "id": "module_001",
-      "name": "Safety Procedures",
-      "description": "Pre-flight safety checks and procedures",
-      "confidence": 0.92
+      "module_id": "mod_intro",
+      "heading": "Introduction to Aircraft Maintenance",
+      "summary": "Overview of safety-critical maintenance responsibilities.",
+      "steps": [
+        {
+          "step_id": "s-001",
+          "text": "Conduct scheduled inspections according to manufacturer specifications.",
+          "category": "general",
+          "evidence": {
+            "page": 1,
+            "lines": [13, 13]
+          },
+          "source": "rules",
+          "confidence": 0.99
+        }
+      ]
     }
   ],
-  "procedural_steps": [
-    {
-      "id": "step_001",
-      "description": "Check aircraft exterior for visible damage",
-      "estimated_time": "15 minutes",
-      "required_tools": ["flashlight", "checklist"],
-      "safety_notes": ["Ensure aircraft is properly secured"]
-    }
-  ],
-  "decision_points": [
-    {
-      "id": "decision_001",
-      "condition": "If damage is found, proceed to damage assessment",
-      "actions": ["halt_procedure", "notify_supervisor"]
-    }
-  ]
+  "flows": [],
+  "metadata": {
+    "extraction_mode": "rules-first (LLM fallback supported)",
+    "schema_version": "1.0.0"
+  }
 }
 ```
 
@@ -255,11 +196,6 @@ FINAL PROCESSING SUMMARY:
    Average confidence: 99.0%
 ```
 
-### Alternative: Run the main pipeline test (may have dependency issues)
-```bash
-python test_pipeline.py
-```
-
 ## Troubleshooting
 
 ### Common Issues
@@ -269,17 +205,12 @@ python test_pipeline.py
    - Reduce batch size in configuration
    - Close other applications
 
-2. **Model Download Failures**
-   - Check internet connection
-   - Verify disk space (2-4GB required)
-   - Run `python src/download_models.py` manually
-
-3. **PDF Processing Errors**
+2. **PDF Processing Errors**
    - Verify PDF is not corrupted
    - Check if PDF is password-protected
    - Ensure PDF contains extractable text
 
-4. **Low Accuracy**
+3. **Low Accuracy**
    - Check document quality and formatting
    - Verify document follows technical writing conventions
    - Enable OCR for scanned documents
@@ -288,7 +219,7 @@ python test_pipeline.py
 
 Enable debug logging for detailed troubleshooting:
 ```bash
-python -m src.main --debug --input document.pdf
+python final_proper_pipeline.py --debug
 ```
 
 ## Performance Tips
@@ -308,6 +239,23 @@ python -m src.main --debug --input document.pdf
    - Implement result caching
    - Consider distributed processing for large volumes
 
+## Security Features
+
+This project includes a **Rust-based security system** with:
+
+- **Hardcoded expiration**: 14 days from build timestamp
+- **Multi-layer validation**: 4 security layers
+- **Clock drift detection**: Prevents system clock manipulation
+- **Security signatures**: Hash-based validation
+- **Access limits**: 1000 attempts maximum
+
+### Security Configuration
+
+```bash
+# Test security system
+python core/config_manager.py
+```
+
 ## Support
 
 For issues and questions:
@@ -323,3 +271,30 @@ For issues and questions:
 3. **Evaluate Results**: Review extraction accuracy and quality
 4. **Optimize Performance**: Fine-tune for your requirements
 5. **Deploy to Production**: Set up for regular document processing
+
+## File Structure
+
+```
+structured-pdf-parser/
+├── final_proper_pipeline.py      # Working pipeline (recommended)
+├── proper_output_formatter.py    # Core extraction logic
+├── view_results.py               # Results viewer
+├── core/                         # Rust-based security system
+│   ├── src/                      # Rust source code
+│   └── config_manager.py         # Python security interface
+├── data/                         # Input PDF files
+├── results/                      # Output JSON files
+├── config/                       # Configuration files
+├── requirements.txt              # Python dependencies
+└── Dockerfile                    # Container configuration
+```
+
+## Key Differences from Old Pipeline
+
+| Old `src/` Pipeline | New Working Pipeline |
+|-------------------|---------------------|
+| ❌ NumPy compatibility issues | ✅ No dependency issues |
+| ❌ Empty JSON output | ✅ Rich structured output |
+| ❌ Required model downloads | ✅ Rule-based (no downloads needed) |
+| ❌ Complex setup | ✅ Simple execution |
+| ❌ `src/download_models.py` | ✅ No downloads required |
