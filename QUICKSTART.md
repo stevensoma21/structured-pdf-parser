@@ -3,8 +3,25 @@
 ## Prerequisites
 
 - Python 3.8 or higher
-- 8GB+ RAM (recommended)
+- 4GB+ RAM (for working pipeline)
 - Docker (optional, for containerized deployment)
+
+## Working Pipeline
+
+This project includes a **working pipeline** (`final_proper_pipeline.py`) that produces rich, structured JSON output without dependency issues. This is the recommended approach for immediate use.
+
+**Key Features:**
+- ✅ No NumPy compatibility issues
+- ✅ Rich extraction of modules, steps, and taxonomies
+- ✅ 99% confidence scores
+- ✅ Schema-compliant JSON output
+- ✅ Handles multiple PDF files
+- ✅ Detailed evidence tracking
+
+**Quick Test:**
+```bash
+python final_proper_pipeline.py
+```
 
 ## Installation
 
@@ -48,22 +65,61 @@
 
 ### Command Line Interface
 
-1. **Process a single PDF document**
+**Recommended: Use the working pipeline**
+
+1. **Process all PDF files in the data directory**
+   ```bash
+   python final_proper_pipeline.py
+   ```
+
+2. **View detailed results**
+   ```bash
+   python view_results.py
+   ```
+
+3. **Process a single PDF file**
+   ```bash
+   python -c "
+   from final_proper_pipeline import process_pdf_file
+   process_pdf_file('data/aircraft_maintenance_chapter.pdf', 'results')
+   "
+   ```
+
+**Alternative: Use the main pipeline (may have dependency issues)**
+
+4. **Process a single PDF document**
    ```bash
    python -m src.main --input aircraft_maintenance_chapter.pdf --output result.json
    ```
 
-2. **Process multiple documents**
+5. **Process multiple documents**
    ```bash
    python -m src.main --input-dir ./data --output-dir ./results
    ```
 
-3. **Start API server**
+6. **Start API server**
    ```bash
    python -m src.main --api --host 0.0.0.0 --port 8000
    ```
 
 ### Python API
+
+**Recommended: Use the working pipeline**
+
+```python
+from final_proper_pipeline import process_pdf_file
+
+# Process a document
+output = process_pdf_file("data/aircraft_maintenance_chapter.pdf", "results")
+
+# Access results
+print(f"Document ID: {output['doc_id']}")
+print(f"Title: {output['title']}")
+print(f"Modules: {len(output['modules'])}")
+print(f"Total Steps: {sum(len(module.get('steps', [])) for module in output['modules'])}")
+```
+
+**Alternative: Use the main pipeline (may have dependency issues)**
 
 ```python
 from src.pipeline import TechnicalDocPipeline
@@ -165,24 +221,43 @@ The pipeline produces structured JSON output:
 
 ## Testing
 
-### Run the test script
+### Run the working pipeline test
 ```bash
-python test_pipeline.py
+python final_proper_pipeline.py
 ```
 
 ### Expected output
 ```
-==================================================
-PIPELINE TEST RESULTS
-==================================================
-Document processed: sample_maintenance.txt
-Confidence score: 0.85
-Modules extracted: 2
-Procedural steps: 3
-Decision points: 2
-Equipment identified: 2
-Processing successful: True
-==================================================
+FINAL PROPER ML PIPELINE EXECUTION
+================================================================================
+Found 2 PDF files to process:
+   • Machine Learning Engineer Hiring Projectv2.pdf
+   • aircraft_maintenance_chapter.pdf
+
+============================================================
+PROCESSING: aircraft_maintenance_chapter.pdf
+============================================================
+Processing completed successfully!
+   Document ID: aircraft_maintenance_chapter
+   Title: Chapter 1: Introduction to Aircraft Maintenance
+   Modules: 2
+   Total Steps: 4
+   Flows: 0
+   Saved to: results/aircraft_maintenance_chapter_proper_output.json
+
+FINAL PROCESSING SUMMARY:
+   Total files processed: 2
+   Successful extractions: 2
+   Failed extractions: 0
+   Total modules identified: 2
+   Total procedural steps: 4
+   Total flows: 0
+   Average confidence: 99.0%
+```
+
+### Alternative: Run the main pipeline test (may have dependency issues)
+```bash
+python test_pipeline.py
 ```
 
 ## Troubleshooting
