@@ -199,18 +199,18 @@ def main():
             json.dump(output, f, indent=2)
         
         # Print summary
-        print(f"✅ Processing completed successfully!")
+        print(f"Processing completed successfully!")
         print(f"   Modules extracted: {len(output['modules'])}")
         print(f"   Procedural steps: {len(output['procedural_steps'])}")
         print(f"   Decision points: {len(output['decision_points'])}")
         print(f"   Equipment items: {len(output['equipment'])}")
         print(f"   Confidence score: {output['document_info']['confidence_score']:.1%}")
         
-        print(f"\n📋 Sample modules:")
+        print(f"\nSample modules:")
         for module in output['modules'][:2]:
             print(f"   • {module['name']}")
         
-        print(f"\n📋 Sample steps:")
+        print(f"\nSample steps:")
         for step in output['procedural_steps'][:2]:
             print(f"   • {step['description'][:60]}...")
         
@@ -219,7 +219,7 @@ def main():
         return True
         
     except Exception as e:
-        print(f"❌ Processing failed: {e}")
+        print(f"Processing failed: {e}")
         return False
 
 if __name__ == "__main__":

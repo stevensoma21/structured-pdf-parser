@@ -29,18 +29,18 @@ def process_pdf_with_proper_format(pdf_path, output_dir):
             json.dump(output, f, indent=2)
         
         # Print summary
-        print(f"✅ Processing completed successfully!")
+        print(f"Processing completed successfully!")
         print(f"   📄 Document ID: {output['doc_id']}")
-        print(f"   📋 Title: {output['title']}")
-        print(f"   📊 Modules: {len(output['modules'])}")
+        print(f"   Title: {output['title']}")
+        print(f"   Modules: {len(output['modules'])}")
         
         total_steps = sum(len(module.get('steps', [])) for module in output['modules'])
-        print(f"   📋 Total Steps: {total_steps}")
-        print(f"   🔄 Flows: {len(output['flows'])}")
-        print(f"   💾 Saved to: {output_file}")
+        print(f"   Total Steps: {total_steps}")
+        print(f"   Flows: {len(output['flows'])}")
+        print(f"   Saved to: {output_file}")
         
         # Show module details
-        print(f"\n📋 Module Details:")
+        print(f"\nModule Details:")
         for i, module in enumerate(output['modules'], 1):
             print(f"   {i}. {module['heading'][:50]}...")
             print(f"      Steps: {len(module.get('steps', []))}")
@@ -50,7 +50,7 @@ def process_pdf_with_proper_format(pdf_path, output_dir):
         return output_file
         
     except Exception as e:
-        print(f"❌ Processing failed: {e}")
+        print(f"Processing failed: {e}")
         return None
 
 def create_final_summary(outputs, output_dir):
@@ -116,7 +116,7 @@ def create_final_summary(outputs, output_dir):
 
 def main():
     """Run the final proper pipeline on all sample PDFs."""
-    print("🚀 FINAL PROPER ML PIPELINE EXECUTION")
+    print("FINAL PROPER ML PIPELINE EXECUTION")
     print("=" * 80)
     
     # Setup
@@ -128,10 +128,10 @@ def main():
     pdf_files = list(data_dir.glob("*.pdf"))
     
     if not pdf_files:
-        print("❌ No PDF files found in data/ directory")
+        print("No PDF files found in data/ directory")
         return
     
-    print(f"📁 Found {len(pdf_files)} PDF files to process:")
+    print(f"Found {len(pdf_files)} PDF files to process:")
     for pdf_file in pdf_files:
         print(f"   • {pdf_file.name}")
     
@@ -149,16 +149,16 @@ def main():
     summary, summary_file = create_final_summary(outputs, output_dir)
     
     # Print final summary
-    print(f"\n📊 FINAL PROCESSING SUMMARY:")
+    print(f"\nFINAL PROCESSING SUMMARY:")
     print(f"   📄 Total files processed: {summary['processing_summary']['total_files_processed']}")
-    print(f"   ✅ Successful extractions: {summary['processing_summary']['successful_extractions']}")
-    print(f"   ❌ Failed extractions: {summary['processing_summary']['failed_extractions']}")
-    print(f"   📋 Total modules identified: {summary['overall_statistics']['total_modules']}")
-    print(f"   📋 Total procedural steps: {summary['overall_statistics']['total_steps']}")
-    print(f"   🔄 Total flows: {summary['overall_statistics']['total_flows']}")
-    print(f"   📈 Average confidence: {summary['overall_statistics']['average_confidence']:.1%}")
+    print(f"   Successful extractions: {summary['processing_summary']['successful_extractions']}")
+    print(f"   Failed extractions: {summary['processing_summary']['failed_extractions']}")
+    print(f"   Total modules identified: {summary['overall_statistics']['total_modules']}")
+    print(f"   Total procedural steps: {summary['overall_statistics']['total_steps']}")
+    print(f"   Total flows: {summary['overall_statistics']['total_flows']}")
+    print(f"   Average confidence: {summary['overall_statistics']['average_confidence']:.1%}")
     
-    print(f"\n📁 OUTPUT FILES:")
+    print(f"\nOUTPUT FILES:")
     for result in summary["file_results"]:
         print(f"   • {result['filename']} → {result['output_file']}")
         print(f"     Title: {result['title']}")
@@ -166,7 +166,7 @@ def main():
     
     print(f"\n💾 Final summary saved to: {summary_file}")
     
-    print(f"\n🎉 FINAL PIPELINE EXECUTION COMPLETED!")
+    print(f"\nFINAL PIPELINE EXECUTION COMPLETED!")
     print(f"   All results saved in: {output_dir}")
     print(f"   Output format: {summary['processing_summary']['output_format']}")
     print("=" * 80)
